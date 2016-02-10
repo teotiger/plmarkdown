@@ -1,3 +1,4 @@
+PROMPT CREATE OR REPLACE TYPE BODY plmarkdown
 CREATE OR REPLACE TYPE BODY plmarkdown
 IS
 --------------------------------------------------------------------------------
@@ -79,10 +80,11 @@ END;
 --------------------------------------------------------------------------------
 member PROCEDURE p(p_val VARCHAR2) IS
 BEGIN
-  add2out(p_val||Chr(10));
+  add2out(p_val);
 END;
 --------------------------------------------------------------------------------
 member PROCEDURE h(p_val VARCHAR2, p_idx SIMPLE_INTEGER) IS
+  l_toc VARCHAR2(64);
 BEGIN
   IF p_idx > 6 THEN
     Raise_Application_Error (-20202, 'The maximum number is 6.');
@@ -90,10 +92,10 @@ BEGIN
 
   IF self.toc = 1 THEN
     self.toc_idx := self.toc_idx+1;
-    add2out(LPad('#',p_idx,'#')||' '||'<a name="'||LPad(self.toc_idx,3,'0')||'"></a>'||p_val);
-  ELSE
-    add2out(LPad('#',p_idx,'#')||' '||p_val);
+    l_toc := '<a name="'||LPad(self.toc_idx,3,'0')||'"></a>';
   END IF;
+
+  add2out(Chr(10)||LPad('#',p_idx,'#')||' '||l_toc||p_val);
 END;
 --------------------------------------------------------------------------------
 member PROCEDURE b(p_val VARCHAR2) IS
@@ -118,9 +120,8 @@ END;
 --------------------------------------------------------------------------------
 member PROCEDURE c(p_val VARCHAR2) IS
 BEGIN
-  add2out('    '||REPLACE(p_val,Chr(10),Chr(10)||'    '));
+  add2out(Chr(10)||'    '||REPLACE(p_val,Chr(10),Chr(10)||'    '));
 END;
 --------------------------------------------------------------------------------
 END;
 /
-
