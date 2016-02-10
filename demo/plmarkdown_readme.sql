@@ -45,6 +45,6 @@ BEGIN
 
   l_md.h('Version History', 2);
   -- TODO datum
-  l_md.p('Version 1.0 - February 22, 2016');
+  l_md.p('Version 1.0 - February 10, 2016');
   l_md.ul('Initial release');
 END;

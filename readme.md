@@ -40,5 +40,5 @@ First of all you have to declare and initialize a variable. In the block below, 
 Markdown Preview Plus (MPP) is released under the MIT license.                                                                  
 
 ## Version History                                                                                                             
-Version 1.0 - February 22, 2016                                                                                                 
+Version 1.0 - February 10, 2016                                                                                                 
 * Initial release                                                                                                               
