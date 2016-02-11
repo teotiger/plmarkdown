@@ -6,7 +6,7 @@ BEGIN
   l_md.h('Introduction', 2);
   l_md.p('PLMarkdown is a PL/SQL Object Type to create simple Markdown text and/or files.');
   l_md.p('For more information on Markdown see [http://daringfireball.net/projects/markdown](http://daringfireball.net/projects/markdown/)');
-  -- TODO script
+
   l_md.h('Installation', 2);
   l_md.p('Simply run the install script from the setup folder inside SQL*Plus.');
 
@@ -22,6 +22,7 @@ BEGIN
    l_md := PLMarkdown(true, true);
    ...
    ');
+
   l_md.h('PLMarkdown procedures/functions', 3);
   l_md.ul('`p(p_val VARCHAR2)`<br>A normal paragraph. You can write inside the paragraph specific markup like `**` for **bold**,
   `*` for *italic* or `(link)[https://github.com/)` for a (link)[https://github.com/] as well as valid html code like `<hr>`.');
@@ -37,14 +38,10 @@ BEGIN
   l_md.ul('`get RETURN CLOB`<br>Returns all content from the object.');
   l_md.ul('`save(p_loc VARCHAR2, p_file VARCHAR2)`<br>Writes the content to a filename in a specified location.');
 
-  -- TODO link setzen und kopie von license einbauen
-  -- https://atom.io/packages/markdown-preview-plus   bzw.
-  -- https://github.com/Galadirith/markdown-preview-plus/blob/v2.2.2/LICENSE.md bzw.
   l_md.h('License', 2);
-  l_md.p('Markdown Preview Plus (MPP) is released under the MIT license.');
+  l_md.p('PLMarkdown is released under the (MIT license)[https://github.com/teotiger/plmarkdown/blob/master/license.txt].');
 
   l_md.h('Version History', 2);
-  -- TODO datum
   l_md.p('Version 1.0 - February 10, 2016');
   l_md.ul('Initial release');
 END;

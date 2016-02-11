@@ -19,7 +19,7 @@ First of all you have to declare and initialize a variable. In the block below, 
     BEGIN
        l_md := PLMarkdown(true, true);
        ...
-                             
+
 
 ### PLMarkdown procedures/functions                                                                                            
 * `p(p_val VARCHAR2)`<br>A normal paragraph. You can write inside the paragraph specific markup like `**` for **bold**,
@@ -37,7 +37,7 @@ First of all you have to declare and initialize a variable. In the block below, 
 * `save(p_loc VARCHAR2, p_file VARCHAR2)`<br>Writes the content to a filename in a specified location.                          
 
 ## License                                                                                                                     
-Markdown Preview Plus (MPP) is released under the MIT license.                                                                  
+PLMarkdown is released under the (MIT license)[https://github.com/teotiger/plmarkdown/blob/master/license.txt].                                                                  
 
 ## Version History                                                                                                             
 Version 1.0 - February 10, 2016                                                                                                 
