@@ -14,9 +14,9 @@ BEGIN
 END;
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-member PROCEDURE add2out(p_val VARCHAR2) IS
+member PROCEDURE add2out(p_val VARCHAR2, p_eol BOOLEAN) IS
 BEGIN
-  self.out := self.out||p_val||Chr(10);
+  self.out := self.out||p_val||CASE WHEN p_eol THEN Chr(10) END;
   IF self.prn = 1 THEN
     Dbms_Output.Put_Line(p_val);
   END IF;
@@ -78,6 +78,76 @@ BEGIN
   );
 END;
 --------------------------------------------------------------------------------
+member PROCEDURE sql2table(
+  p_sql_statement IN VARCHAR,
+  p_null_display  IN VARCHAR DEFAULT '--',
+  p_date_format   IN VARCHAR DEFAULT 'dd.mm.yyyy',
+  p_number_format IN VARCHAR DEFAULT 'FM9G999G999G999G990D00'
+)
+IS
+  l_cursor SYS_REFCURSOR;
+  l_cursor_int NUMBER;
+  l_cursor_cols SIMPLE_INTEGER := 0;
+  l_cursor_desc DBMS_SQL.DESC_TAB2;
+  l_typ_number NUMBER;
+  l_typ_date DATE;
+  l_typ_varchar VARCHAR(32767);
+
+BEGIN
+  OPEN l_cursor FOR p_sql_statement;
+  l_cursor_int := DBMS_SQL.TO_CURSOR_NUMBER(l_cursor);
+  DBMS_SQL.DESCRIBE_COLUMNS2(l_cursor_int,l_cursor_cols,l_cursor_desc);
+
+  FOR i IN 1..l_cursor_cols LOOP
+    CASE
+      WHEN l_cursor_desc(i).col_type IN (2,100,101) THEN
+        DBMS_SQL.DEFINE_COLUMN(l_cursor_int,i,l_typ_number);
+      WHEN l_cursor_desc(i).col_type IN (12,180,181,231) THEN
+        DBMS_SQL.DEFINE_COLUMN(l_cursor_int,i,l_typ_date);
+      ELSE
+        DBMS_SQL.DEFINE_COLUMN(l_cursor_int,i,l_typ_varchar,32767);
+    END CASE;
+  END LOOP;
+
+  -- write table header
+  FOR i IN 1..l_cursor_desc.Count LOOP
+    add2out('|'||l_cursor_desc(i).col_name, FALSE);
+  END LOOP;
+  add2out('|');
+
+  -- format alignment according to datatype
+  FOR i IN 1..l_cursor_desc.Count LOOP
+    CASE
+      WHEN l_cursor_desc(i).col_type IN (2,100,101) THEN
+        add2out('|---:', FALSE);
+      WHEN l_cursor_desc(i).col_type IN (12,180,181,231) THEN
+        add2out('|:---:', FALSE);
+      ELSE
+        add2out('|:---', FALSE);
+    END CASE;
+  END LOOP;
+  add2out('|');
+
+  WHILE DBMS_SQL.FETCH_ROWS(l_cursor_int) > 0 LOOP
+    FOR j IN 1..l_cursor_cols LOOP
+      CASE
+        WHEN l_cursor_desc(j).col_type IN (2,100,101) THEN
+          DBMS_SQL.COLUMN_VALUE(l_cursor_int,j,l_typ_number);
+          add2out('|'||CASE WHEN l_typ_number IS NULL THEN p_null_display ELSE To_Char(l_typ_number, p_number_format) END, FALSE);
+        WHEN l_cursor_desc(j).col_type IN (12,180,181,231) THEN
+          DBMS_SQL.COLUMN_VALUE(l_cursor_int,j,l_typ_date);
+          add2out('|'||CASE WHEN l_typ_date IS NULL THEN p_null_display ELSE TO_CHAR(l_typ_date,p_date_format) END, FALSE);
+        ELSE
+          DBMS_SQL.COLUMN_VALUE(l_cursor_int,j,l_typ_varchar);
+          add2out('|'||CASE WHEN l_typ_varchar IS NULL THEN p_null_display ELSE l_typ_varchar END, FALSE);
+      END CASE;
+    END LOOP;
+    add2out('|');
+  END LOOP;
+
+  DBMS_SQL.CLOSE_CURSOR(l_cursor_int);
+END;
+--------------------------------------------------------------------------------
 member PROCEDURE p(p_val VARCHAR2) IS
 BEGIN
   add2out(p_val);
@@ -125,3 +195,4 @@ END;
 --------------------------------------------------------------------------------
 END;
 /
+

@@ -37,11 +37,14 @@ BEGIN
   l_md.ul('`lorem(p_words SIMPLE_INTEGER)`<br>Adds a specific number of  words (max 149) from the lorem ipsum text.');
   l_md.ul('`get RETURN CLOB`<br>Returns all content from the object.');
   l_md.ul('`save(p_loc VARCHAR2, p_file VARCHAR2)`<br>Writes the content to a filename in a specified location.');
+  l_md.ul('`sql2table(p_sql_statement VARCHAR, p_null_display VARCHAR DEFAULT ''--'', p_date_format VARCHAR DEFAULT ''dd.mm.yyyy'', p_number_format VARCHAR DEFAULT ''FM9G999G999G999G990D00'')`<br>Convert a sql statement to a table.');
 
   l_md.h('License', 2);
   l_md.p('PLMarkdown is released under the [MIT license](https://github.com/teotiger/plmarkdown/blob/master/license.txt).');
 
   l_md.h('Version History', 2);
+  l_md.p('Version 1.1 - March 8, 2016');
+  l_md.ul('sql2table added');
   l_md.p('Version 1.0 - February 10, 2016');
   l_md.ul('Initial release');
 END;
