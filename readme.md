@@ -43,5 +43,6 @@ PLMarkdown is released under the [MIT license](https://github.com/teotiger/plmar
 ## Version History                                                                                                                                                                                                     
 Version 1.1 - March 8, 2016                                                                                                                                                                                             
 * sql2table added                                                                                                                                                                                                       
+
 Version 1.0 - February 10, 2016                                                                                                                                                                                         
 * Initial release

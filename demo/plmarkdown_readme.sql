@@ -45,6 +45,7 @@ BEGIN
   l_md.h('Version History', 2);
   l_md.p('Version 1.1 - March 8, 2016');
   l_md.ul('sql2table added');
+  l_md.p('');
   l_md.p('Version 1.0 - February 10, 2016');
   l_md.ul('Initial release');
 END;
