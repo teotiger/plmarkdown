@@ -52,7 +52,7 @@ END;
 member FUNCTION get
 RETURN CLOB IS
   l_hit VARCHAR2(512);
-  l_reg VARCHAR2(100) := '(#{1,6}.*)';
+  l_reg VARCHAR2(100) := '(#{1,6}\s.*)';
   l_i   SIMPLE_INTEGER := 1;
   l_flg VARCHAR2(10)  := 'imx';
   l_ind SIMPLE_INTEGER := 0;
@@ -63,12 +63,12 @@ BEGIN
     WHILE l_hit IS NOT NULL LOOP
       -- indentation
       l_ind := REGEXP_COUNT(
-          REGEXP_SUBSTR(self.out, '(#{1,6})', 1, l_i, l_flg, 1)
+          REGEXP_SUBSTR(self.out, '(#{1,6}\s)', 1, l_i, l_flg, 1)
         , '#', 1, 'i');
       -- convert l_hit to toc entry
       l_toc := l_toc
         -- indent
-        ||LPad(l_i,l_ind,' ')||'. '
+        ||LPad(l_i,l_ind*3,' ')||'. '
         -- name
         ||'['||REGEXP_SUBSTR(Trim(l_hit), '</a>(.*)', 1, 1, l_flg, 1)||']'
         -- link
