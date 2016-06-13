@@ -26,7 +26,7 @@ BEGIN
   l_md.h3('PLMarkdown procedures/functions');
   l_md.ul('`p(p_val VARCHAR2)`<br>A normal paragraph. You can write inside the paragraph a specific markup like `**` for **bold**,
   `*` for *italic* or `[link](https://github.com/)` for a [link](https://github.com/) as well as valid html code like `<hr>`.');
-  l_md.ul('`h(p_val VARCHAR2, p_idx SIMPLE_INTEGER DEFAULT 1)`<br>A header text.');
+  l_md.ul('`h1(p_val VARCHAR2)` ... `h6(p_val VARCHAR2)`<br>A header text.');
   l_md.ul('`b(p_val VARCHAR2)`<br>A blockquote.');
   l_md.ul('`ul(p_val VARCHAR2, p_idx SIMPLE_INTEGER DEFAULT 1)`<br>An unordered list.');
   l_md.ul('`ol(p_val VARCHAR2, p_idx SIMPLE_INTEGER DEFAULT 1)`<br>An ordered list.');
