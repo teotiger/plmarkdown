@@ -23,6 +23,22 @@ BEGIN
 END;
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+member PROCEDURE h(p_val VARCHAR2, p_idx SIMPLE_INTEGER) IS
+  l_toc VARCHAR2(64);
+BEGIN
+  IF p_idx > 6 THEN
+    Raise_Application_Error (-20202, 'The maximum number is 6.');
+  END IF;
+
+  IF self.toc = 1 THEN
+    self.toc_idx := self.toc_idx+1;
+    l_toc := '<a name="'||LPad(self.toc_idx,3,'0')||'"></a>';
+  END IF;
+
+  add2out(CASE WHEN Length(self.out)>1 THEN Chr(10) END||LPad('#',p_idx,'#')||' '||l_toc||p_val);
+END;
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 member PROCEDURE lorem(p_words SIMPLE_INTEGER) IS
   l_lorem VARCHAR2(1024) := 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
 BEGIN
@@ -80,9 +96,9 @@ END;
 --------------------------------------------------------------------------------
 member PROCEDURE sql2table(
   p_sql_statement IN VARCHAR,
-  p_null_display  IN VARCHAR DEFAULT '--',
-  p_date_format   IN VARCHAR DEFAULT 'dd.mm.yyyy',
-  p_number_format IN VARCHAR DEFAULT 'FM9G999G999G999G990D00'
+  p_null_display  IN VARCHAR,
+  p_date_format   IN VARCHAR,
+  p_number_format IN VARCHAR
 )
 IS
   l_cursor SYS_REFCURSOR;
@@ -153,19 +169,34 @@ BEGIN
   add2out(p_val);
 END;
 --------------------------------------------------------------------------------
-member PROCEDURE h(p_val VARCHAR2, p_idx SIMPLE_INTEGER) IS
-  l_toc VARCHAR2(64);
+member PROCEDURE h1(p_val VARCHAR2) IS
 BEGIN
-  IF p_idx > 6 THEN
-    Raise_Application_Error (-20202, 'The maximum number is 6.');
-  END IF;
-
-  IF self.toc = 1 THEN
-    self.toc_idx := self.toc_idx+1;
-    l_toc := '<a name="'||LPad(self.toc_idx,3,'0')||'"></a>';
-  END IF;
-
-  add2out(Chr(10)||LPad('#',p_idx,'#')||' '||l_toc||p_val);
+  h(p_val, 1);
+END;
+--------------------------------------------------------------------------------
+member PROCEDURE h2(p_val VARCHAR2) IS
+BEGIN
+  h(p_val, 2);
+END;
+--------------------------------------------------------------------------------
+member PROCEDURE h3(p_val VARCHAR2) IS
+BEGIN
+  h(p_val, 3);
+END;
+--------------------------------------------------------------------------------
+member PROCEDURE h4(p_val VARCHAR2) IS
+BEGIN
+  h(p_val, 4);
+END;
+--------------------------------------------------------------------------------
+member PROCEDURE h5(p_val VARCHAR2) IS
+BEGIN
+  h(p_val, 5);
+END;
+--------------------------------------------------------------------------------
+member PROCEDURE h6(p_val VARCHAR2) IS
+BEGIN
+  h(p_val, 6);
 END;
 --------------------------------------------------------------------------------
 member PROCEDURE b(p_val VARCHAR2) IS
@@ -195,4 +226,3 @@ END;
 --------------------------------------------------------------------------------
 END;
 /
-
