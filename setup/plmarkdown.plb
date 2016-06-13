@@ -9,7 +9,7 @@ BEGIN
   self.prn := CASE WHEN p_prn THEN 1 ELSE 0 END;
   self.toc := CASE WHEN p_toc THEN 1 ELSE 0 END;
   self.toc_idx := 0;
-  self.out := ' ';
+  self.out := '';
   RETURN;
 END;
 --------------------------------------------------------------------------------
@@ -226,3 +226,4 @@ END;
 --------------------------------------------------------------------------------
 END;
 /
+
