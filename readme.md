@@ -24,7 +24,7 @@ First of all you have to declare and initialize a variable. In the block below, 
 ### PLMarkdown procedures/functions
 * `p(p_val VARCHAR2)`<br>A normal paragraph. You can write inside the paragraph a specific markup like `**` for **bold**,
   `*` for *italic* or `[link](https://github.com/)` for a [link](https://github.com/) as well as valid html code like `<hr>`.
-* `h1(p_val VARCHAR2)` ... `h6(p_val VARCHAR2)`<br>A header text.
+* `h1(p_val VARCHAR2)`, `h2(p_val VARCHAR2)`, `h3(p_val VARCHAR2)`, `h4(p_val VARCHAR2)`, `h5(p_val VARCHAR2)` and `h6(p_val VARCHAR2)`<br>A header text.
 * `b(p_val VARCHAR2)`<br>A blockquote.
 * `ul(p_val VARCHAR2, p_idx SIMPLE_INTEGER DEFAULT 1)`<br>An unordered list.
 * `ol(p_val VARCHAR2, p_idx SIMPLE_INTEGER DEFAULT 1)`<br>An ordered list.
