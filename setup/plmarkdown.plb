@@ -128,6 +128,7 @@ BEGIN
   END LOOP;
 
   -- write table header
+  add2out(Chr(10));
   FOR i IN 1..l_cursor_desc.Count LOOP
     add2out('|'||l_cursor_desc(i).col_name, FALSE);
   END LOOP;
