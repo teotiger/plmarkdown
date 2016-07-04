@@ -1,5 +1,4 @@
-PROMPT CREATE OR REPLACE TYPE plmarkdown
-CREATE OR REPLACE type plmarkdown
+CREATE OR REPLACE type plmarkdown AUTHID current_user
 --------------------------------------------------------------------------------
 --    ______ _     ___  ___  ___  ______ _   _______ _____  _    _ _   _
 --    | ___ \ |    |  \/  | / _ \ | ___ \ | / /  _  \  _  || |  | | \ | |
@@ -20,6 +19,8 @@ AS
     toc           INTEGER,
     toc_idx       INTEGER,
     out           CLOB,
+    smooth        INTEGER,
+    height        VARCHAR2(5),
     /* CONSTRUCTOR FUNCTION */
     constructor FUNCTION plmarkdown(
       p_prn BOOLEAN DEFAULT FALSE,
@@ -36,6 +37,12 @@ AS
       p_null_display  IN VARCHAR DEFAULT '--',
       p_date_format   IN VARCHAR DEFAULT SYS_CONTEXT ('USERENV', 'NLS_DATE_FORMAT'),
       p_number_format IN VARCHAR DEFAULT 'FM9G999G999G999G990D00'
+    ),
+    member PROCEDURE sql2chart(
+      p_sql_statement IN VARCHAR2,
+      p_chart_type    IN VARCHAR2,-- pie/bar/line/area
+      p_show_legend   IN BOOLEAN  DEFAULT FALSE,
+      p_image_type    IN VARCHAR2 DEFAULT 'PNG'
     ),
     /**/
     member PROCEDURE p(p_val VARCHAR2),/* italic, strong, links */

@@ -1,4 +1,3 @@
-PROMPT CREATE OR REPLACE TYPE BODY plmarkdown
 CREATE OR REPLACE TYPE BODY plmarkdown
 IS
 --------------------------------------------------------------------------------
@@ -10,6 +9,9 @@ BEGIN
   self.toc := CASE WHEN p_toc THEN 1 ELSE 0 END;
   self.toc_idx := 0;
   self.out := '';
+  self.height := '300px';
+  self.smooth := 0;
+
   RETURN;
 END;
 --------------------------------------------------------------------------------
@@ -164,6 +166,126 @@ BEGIN
   DBMS_SQL.CLOSE_CURSOR(l_cursor_int);
 END;
 --------------------------------------------------------------------------------
+member PROCEDURE sql2chart(
+  p_sql_statement IN VARCHAR2,
+  p_chart_type    IN VARCHAR2,
+  p_show_legend   IN BOOLEAN,
+  p_image_type    IN VARCHAR2
+)
+IS
+  l_chrt CHAR := SubStr(Lower(p_chart_type),0,1);
+  o_ds   VARCHAR2(2000);
+  o_lbl  VARCHAR2(1000);
+
+  -- zero or one vc2 column for label (date can be converted via to_char function)
+  -- n numeric columns for values
+  -- column_name is legend entry name
+  PROCEDURE sql2dataset(
+    p_sql_statement IN  VARCHAR2,
+    p_chrt          IN  CHAR,
+    o_dataset       OUT VARCHAR2,
+    o_labels        OUT VARCHAR2 )
+  IS
+    l_cursor SYS_REFCURSOR;
+    l_cursor_int NUMBER;
+    l_cursor_cols SIMPLE_INTEGER := 0;
+    l_cursor_desc DBMS_SQL.DESC_TAB2;
+    l_typ_number NUMBER;
+    l_typ_varchar VARCHAR(32767);
+
+    l_ds VARCHAR2(2000);
+    l_ds_pie VARCHAR2(2000);
+    TYPE t_int IS TABLE OF VARCHAR2(2000) INDEX BY PLS_INTEGER;
+    l_ds_n t_int;
+
+    l_i PLS_INTEGER:=0;
+    l_num_cols PLS_INTEGER:=0;
+    l_no_label BOOLEAN := TRUE;
+  BEGIN
+    OPEN l_cursor FOR p_sql_statement;
+    l_cursor_int := DBMS_SQL.TO_CURSOR_NUMBER(l_cursor);
+    DBMS_SQL.DESCRIBE_COLUMNS2(l_cursor_int,l_cursor_cols,l_cursor_desc);
+
+    FOR i IN 1..l_cursor_cols LOOP
+      CASE
+        WHEN l_cursor_desc(i).col_type IN (2,100,101) THEN
+          DBMS_SQL.DEFINE_COLUMN(l_cursor_int,i,l_typ_number);
+          l_ds_n(i):=l_cursor_desc(i).col_name||'=';
+        ELSE
+          l_no_label:=FALSE;
+          DBMS_SQL.DEFINE_COLUMN(l_cursor_int,i,l_typ_varchar,32767);
+      END CASE;
+    END LOOP;
+
+    o_labels:='&_labels=';
+
+    WHILE DBMS_SQL.FETCH_ROWS(l_cursor_int) > 0 LOOP
+      l_i:=l_i+1;
+      FOR j IN 1..l_cursor_cols LOOP
+        CASE
+          WHEN l_cursor_desc(j).col_type IN (2,100,101) THEN
+            DBMS_SQL.COLUMN_VALUE(l_cursor_int,j,l_typ_number);
+            IF p_chrt <> 'p' THEN
+              -- TODO was nachkommastellen dann kuerzen auf 1
+              l_ds_n(j):=l_ds_n(j)||REPLACE(Trunc(l_typ_number,1),',','.')||',';
+            END IF;
+          ELSE
+            DBMS_SQL.COLUMN_VALUE(l_cursor_int,j,l_typ_varchar);
+            o_labels:=o_labels||To_Char(l_typ_varchar)||',';
+        END CASE;
+      END LOOP;
+
+      -- if label is missing create sequence
+      IF l_no_label THEN
+        l_typ_varchar:=l_i;
+        o_labels:=o_labels||l_typ_varchar||',';
+      END IF;
+
+      IF p_chrt = 'p' THEN
+        l_ds_pie:=l_ds_pie||l_typ_varchar||'='||l_typ_number||'&';
+      END IF;
+
+    END LOOP;
+
+    FOR i IN 1..l_ds_n.LAST LOOP
+      IF l_ds_n.EXISTS(i) THEN
+        l_ds:=l_ds||RTrim(l_ds_n(i), ',')||'&';
+      END IF;
+    END LOOP;
+
+    -- TODO encode url
+    DBMS_SQL.CLOSE_CURSOR(l_cursor_int);
+    o_labels  := CASE WHEN p_chrt='p' THEN NULL ELSE RTrim(o_labels, ',') END;
+    o_dataset := CASE WHEN p_chrt='p' THEN RTrim(l_ds_pie, '&') ELSE RTrim(l_ds, '&') END;
+  END;
+
+BEGIN
+  -- parameter validation
+  IF l_chrt NOT IN ('p','b','l','a') THEN
+    Raise_Application_Error(-20101, 'The value of the parameter p_chart_type is not correct.');
+  END IF;
+  IF Lower(p_image_type) NOT IN ('png','svg') THEN
+    Raise_Application_Error(-20102, 'The value of the parameter p_image_type is not correct.');
+  END IF;
+
+  -- get data
+  sql2dataset(p_sql_statement, l_chrt, o_ds, o_lbl);
+
+  -- create url
+  img('http://chartspree.io/'
+      ||Lower(p_chart_type)
+      ||'.'
+      ||Lower(p_image_type)
+      ||'?'
+      ||o_ds
+      ||o_lbl
+      ||'&_show_legend='||CASE WHEN p_show_legend THEN 'true' ELSE 'false' END
+      ||'&_height='||self.height
+      ||CASE WHEN l_chrt='a' THEN '&_fill=true' END
+      ||CASE WHEN self.smooth=1 THEN '&interpolate=cubic' END
+    ,'Chart from Chartspree.io');
+END;
+--------------------------------------------------------------------------------
 member PROCEDURE p(p_val VARCHAR2) IS
 BEGIN
   add2out(p_val);
@@ -226,4 +348,3 @@ END;
 --------------------------------------------------------------------------------
 END;
 /
-
