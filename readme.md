@@ -36,7 +36,7 @@ First of all you have to declare and initialize a variable. In the block below, 
 * `get RETURN CLOB`<br>Returns all content from the object.
 * `save(p_loc VARCHAR2, p_file VARCHAR2)`<br>Writes the content to a filename in a specified location.
 * `sql2table(p_sql_statement VARCHAR2, p_null_display VARCHAR2 DEFAULT '--', p_date_format VARCHAR2 DEFAULT 'dd.mm.yyyy', p_number_format VARCHAR2 DEFAULT 'FM9G999G999G999G990D00')`<br>Convert a sql statement to a table.
-* `sql2chart(p_sql_statement VARCHAR2, p_chart_type VARCHAR2, p_show_legend BOOLEAN DEFAULT FALSE, p_image_type VARCHAR2 DEFAULT 'png')`<br>Convert a sql statement to a chart.
+* `sql2chart(p_sql_statement VARCHAR2, p_chart_type VARCHAR2, p_show_legend BOOLEAN DEFAULT FALSE, p_image_type VARCHAR2 DEFAULT 'png')`<br>Convert a sql statement to a chart.<br>
 **Notes:** Valid chart types are 'pie', 'bar', 'line' and 'area', valid image types 'png' and 'svg'. For more information see [plmarkdown_hr_schema.md](https://github.com/teotiger/plmarkdown/blob/master/demo/plmarkdown_hr_schema.md) in the demo section or visit the website from [chartspree.io](http://chartspree.io).
 
 ## HTML Output

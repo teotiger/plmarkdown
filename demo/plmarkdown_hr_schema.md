@@ -17,7 +17,7 @@ The same looks much better in a chart.
 
 
 ### Interpretation
-If you analyze the data, you can for example compare the salaries in different departments with a query like this:
+If you analyze the data, you can for example compare the salaries in different departments with a query like...
 
 
       SELECT InitCap(department_name) as "Department",
@@ -28,6 +28,6 @@ If you analyze the data, you can for example compare the salaries in different d
        WHERE department_name IN ('IT', 'Sales','Finance','Marketing','Shipping')
     GROUP BY department_name
     ORDER BY 1
-And then display the result in a big bar chart.
+...and then display the result in a big bar chart.
 ![Chart from Chartspree.io](http://chartspree.io/bar.png?Minimum=6900,4200,6000,6100,2100&Average=8602,5760,9500,8956,3476&Maximum=12008,9000,13000,14000,8200&_labels=Finance,It,Marketing,Sales,Shipping&_show_legend=true&_height=500px "Chart from Chartspree.io")
 

@@ -32,7 +32,7 @@ PIVOT (Count(object_name) FOR object_type IN (
 
   -- bar chart
   l_md.h3('Interpretation');
-  l_md.p('If you analyze the data, you can for example compare the salaries in different departments with a query like this:');
+  l_md.p('If you analyze the data, you can for example compare the salaries in different departments with a query like...');
   l_sql := q'~
   SELECT InitCap(department_name) as "Department",
          Ceil(Min(salary)) AS "Minimum",
@@ -43,7 +43,7 @@ PIVOT (Count(object_name) FOR object_type IN (
 GROUP BY department_name
 ORDER BY 1~';
   l_md.c(l_sql);
-  l_md.p('And then display the result in a big bar chart.');
+  l_md.p('...and then display the result in a big bar chart.');
   l_md.height:='500px';
   l_md.sql2chart(l_sql, 'bar', TRUE);
   Dbms_Output.Put_Line(l_md.get);
