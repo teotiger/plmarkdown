@@ -1,6 +1,6 @@
 -- The following block must be executed in the default HR schema
 DECLARE
-  l_md PLMarkdown:= PLMarkdown();--TRUE, FALSE);
+  l_md PLMarkdown:= PLMarkdown();
   l_sql VARCHAR2(4000);
 BEGIN
   l_md.h1('Oracle Database Sample Schemas');
