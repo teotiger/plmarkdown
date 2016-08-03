@@ -178,7 +178,7 @@ IS
   o_ds   VARCHAR2(2000);
   o_lbl  VARCHAR2(1000);
 
-  -- zero or one vc2 column for label (date can be converted via to_char function)
+  -- zero or one vc2 column for label (date must be converted via to_char function)
   -- n numeric columns for values
   -- column_name is legend entry name
   PROCEDURE sql2dataset(
