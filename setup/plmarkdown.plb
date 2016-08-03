@@ -80,7 +80,7 @@ BEGIN
       l_hit := REGEXP_SUBSTR(self.out, l_reg, 1, l_i, l_flg, 1);
     END LOOP;
 
-    RETURN l_toc||self.out;
+    RETURN l_toc||Chr(10)||self.out;
   ELSE
     RETURN self.out;
   END IF;
